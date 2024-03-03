@@ -85,17 +85,72 @@ const fundo = {
     }
 }
 
+// [Tela de inicio]
+const mensagemGetReady = {
+    spriteX: 133,
+    spriteY: 0,
+    largura: 175,
+    altura: 149,
+    x: (canvas.width  / 2) - 174 / 2,
+    y: 50,
+    desenha() {
+        contexto.drawImage(
+            sprites,
+            mensagemGetReady.spriteX, mensagemGetReady.spriteY,
+            mensagemGetReady.largura, mensagemGetReady.altura,
+            mensagemGetReady.x, mensagemGetReady.y,
+            mensagemGetReady.largura, mensagemGetReady.altura
+        )
+    }
+}
 
+//
+// [Telas]
+//
+let telaAtiva = {};
+function mudaParaTela(novaTela) {
+    telaAtiva = novaTela;
+}
+const Telas = {
+    INICIO: {
+        desenha() {
+            fundo.desenha();
+            chao.desenha();
+            flappyBird.desenha();
+            mensagemGetReady.desenha();
+        },
+        click() {
+            mudaParaTela(Telas.JOGO);
+        },
+        atualiza() {
+
+        }
+    }
+}
+
+Telas.JOGO = {
+    desenha() {
+        fundo.desenha();
+        chao.desenha();
+        flappyBird.desenha();
+    },
+    atualiza() {
+        flappyBird.atuliza();
+    }
+}
 
 function loop() {
-    flappyBird.atuliza();
-
-    fundo.desenha();
-    chao.desenha();
-    flappyBird.desenha();
-
+    telaAtiva.desenha();
+    telaAtiva.atualiza();
 
     requestAnimationFrame(loop);
 }
 
+window.addEventListener('click', function() {
+    if(telaAtiva.click) {
+        telaAtiva.click();
+    }
+})
+
+mudaParaTela(Telas.INICIO);
 loop();
