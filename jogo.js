@@ -9,7 +9,7 @@ const canvas = document.querySelector('canvas');
 const contexto = canvas.getContext('2d');
 
 function fazColisao(flappyBird, chao) {
-    const flappyBirdY = flappyBird.y + flappyBird.altura;
+    const flappyBirdY = flappyBird.y + flappyBird.altura + 1;
     const chaoY = chao.y;
 
     if (flappyBirdY >= chaoY) {
@@ -31,12 +31,12 @@ function criaFlappyBird() {
         gravidade: 0.25,
         velocidade: 0,
         pula() {
-            console.log('Devo pular');
+            // console.log('Devo pular');
             flappyBird.velocidade =- flappyBird.pulo;
         },
         atualiza() {
             if (fazColisao(flappyBird, globais.chao)) {
-                console.log('Fez colisao');
+                // console.log('Fez colisao');
                 som_HIT.play();
 
                 // setTimeout(() => {
@@ -97,7 +97,7 @@ function criaChao() {
         largura: 224,
         altura: 113,
         x: 0,
-        y: canvas.height - 113,
+        y: canvas.height - 112,
         atualiza() {
             const movimentoDoChao = 1;
             const repeteEm = chao.largura / 2;
@@ -161,7 +161,7 @@ const fundo = {
     }
 }
 
-// [Tela de inicio]
+// [mensagemGetReady]
 const mensagemGetReady = {
     spriteX: 133,
     spriteY: 0,
@@ -256,7 +256,7 @@ function criaCanos() {
             const cabecaDoFlappy = globais.flappyBird.y;
             const peDoFlappy = globais.flappyBird.y + globais.flappyBird.altura;
 
-            if(globais.flappyBird.x >= par.x) {
+            if((globais.flappyBird.x + globais.flappyBird.largura - 3) >= par.x) {
                 // console.log('Flappy bird invadiu a área dos canos')
 
                 if(cabecaDoFlappy <= par.canoCeu.y) {
@@ -276,7 +276,7 @@ function criaCanos() {
         atualiza() {
             const passou100Frames = frames % 100 === 0;
             if(passou100Frames) {
-                console.log('passou 100 frames');
+                // console.log('passou 100 frames');
                 canos.pares.push({
                     x: canvas.width,
                     y: -150 * (Math.random() + 1),
@@ -287,8 +287,9 @@ function criaCanos() {
                 par.x = par.x - 2;
 
                 if (canos.temColisaoComOFlapyBird(par)) {
-                    console.log('Você perdeu')
-                    mudaParaTela(Telas.INICIO);
+                    // console.log('Você perdeu')
+                    som_HIT.play();
+                    mudaParaTela(Telas.GAME_OVER);
                 }
                 
                 if(par.x + canos.largura <= 0) {
